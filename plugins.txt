@@ -1,0 +1,9 @@
+# Required plugins for basic Jenkins setup
+workflow-aggregator
+git
+github
+blueocean
+docker-workflow
+pipeline-github-lib
+ssh-slaves
+ws-cleanup

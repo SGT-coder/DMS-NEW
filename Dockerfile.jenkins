@@ -1,0 +1,12 @@
+# Use the official Jenkins LTS image
+FROM jenkins/jenkins:lts-jdk17
+
+# Skip initial setup
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+
+# Install plugins
+COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
+
+# Expose ports
+EXPOSE 8080 50000
