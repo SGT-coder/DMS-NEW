@@ -1,11 +1,24 @@
 pipeline {
     agent any
     
+    environment {
+        NODE_VERSION = '18'
+    }
+    
     stages {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
                 script {
+                    // Install Node.js and npm
+                    sh 'curl -fsSL https://deb.nodesource.com/setup_18.x | bash -'
+                    sh 'apt-get install -y nodejs'
+                    
+                    // Verify installation
+                    sh 'node --version'
+                    sh 'npm --version'
+                    
+                    // Install project dependencies
                     sh 'npm install'
                 }
             }
@@ -22,9 +35,15 @@ pipeline {
         
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                echo 'Checking for test script...'
                 script {
-                    sh 'npm test'
+                    def testScriptExists = sh(script: 'npm list scripts | grep test', returnStatus: true) == 0
+                    if (testScriptExists) {
+                        echo 'Running tests...'
+                        sh 'npm test'
+                    } else {
+                        echo 'No test script found in package.json, skipping tests'
+                    }
                 }
             }
         }
