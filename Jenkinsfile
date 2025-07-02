@@ -5,21 +5,27 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh 'npm install'
+                script {
+                    sh 'npm install'
+                }
             }
         }
         
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                sh 'npm run build'
+                script {
+                    sh 'npm run build'
+                }
             }
         }
         
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                sh 'npm test'
+                script {
+                    sh 'npm test'
+                }
             }
         }
         
@@ -36,14 +42,6 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            cleanWs()
-        }
-    }
-    }
-    
-    post {
-        always {
-            // Clean up workspace
             cleanWs()
         }
         success {
