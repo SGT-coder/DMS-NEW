@@ -30,7 +30,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds()
         timeout(time: 30, unit: 'MINUTES')
-        gitLabConnection('gitlab-connection')
     }
 
     stages {
