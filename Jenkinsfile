@@ -5,7 +5,12 @@ def VERSION = "${env.BUILD_NUMBER}"
 def ENV = "${params.ENVIRONMENT ?: 'staging'}"
 
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-alpine'
+            args '-u root'
+        }
+    }
 
     environment {
         // Make credentials optional with null checks
@@ -164,6 +169,11 @@ pipeline {
                     cleanWs()
                 }
                 
+                // Basic build status notification
+                echo "Build ${currentBuild.currentResult}: ${currentBuild.fullDisplayName}"
+                
+                // Uncomment and configure the Slack notifications if needed
+                /*
                 if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                     slackSend(
                         color: 'good',
@@ -175,6 +185,7 @@ pipeline {
                         message: "❌ ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}"
                     )
                 }
+                */
             }
         }
     }
