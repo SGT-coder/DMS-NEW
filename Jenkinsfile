@@ -8,6 +8,7 @@ pipeline {
     agent any
 
     environment {
+        // Make credentials optional
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         SONAR_TOKEN = credentials('sonar-token')
         NPM_TOKEN = credentials('npm-token')
@@ -144,7 +145,9 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            // Remove cleanWs() step as it requires a plugin
+            // Clean up workspace using standard steps
+            deleteDir()
             script {
                 if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                     slackSend(
