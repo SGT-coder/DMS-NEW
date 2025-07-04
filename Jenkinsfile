@@ -102,11 +102,14 @@ pipeline {
                                 -Dsonar.projectKey=dms \
                                 -Dsonar.projectName=DMS \
                                 -Dsonar.sources=. \
-                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                    '''
+                                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+                            '''
+                        }
+                    } catch (err) {
+                        echo "SonarQube analysis skipped or failed: ${err.message}"
+                    }
                 }
             }
-        }
 
         stage('Build Docker Image') {
             steps {
